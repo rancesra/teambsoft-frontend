@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Catálogo dentro del Host App</title>
+<style>
+  :root{
+    --ink:#16212B; --ink-2:#5C6B7A; --line:#DFE5EB; --surface:#F5F7F9; --card:#FFFFFF;
+    --accent:#1F5FA8; --spec:#6B3FA0; --ok:#1B7F5A; --warn:#9A5B00; --otro:#C98A21;
+    --radius:6px;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface);color:var(--ink);font-family:var(--sans);line-height:1.55}
+  .doc{max-width:1080px;margin:0 auto;padding:32px 16px 80px}
+  h1{font-size:26px;margin:0 0 4px}
+  h2{font-size:19px;margin:44px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+  h3{font-size:15px;margin:22px 0 8px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+  p{margin:8px 0}
+  code{font-family:var(--mono);font-size:.88em;background:#EEF1F4;padding:1px 5px;border-radius:3px}
+  .sub{color:var(--ink-2);font-size:14px;margin-bottom:22px}
+
+  .leyenda{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:18px 0 8px}
+  .leyenda ul{margin:8px 0 0;padding-left:18px}
+  .leyenda li{margin:4px 0;font-size:14px}
+  .pin{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+
+  /* --- marco de pantalla --- */
+  .pantalla{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:14px 0 6px;box-shadow:0 1px 3px rgba(22,33,43,.06)}
+  .chrome{background:#EAEEF2;border-bottom:1px solid var(--line);padding:7px 12px;display:flex;align-items:center;gap:7px}
+  .chrome i{width:9px;height:9px;border-radius:50%;background:#C6CED6;display:block}
+  .url{margin-left:8px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font:12px var(--mono);color:var(--ink-2);flex:1}
+
+  /* --- cascarón del host app --- */
+  .host{padding:10px}
+  .host-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px;border:1px dashed var(--otro);border-radius:var(--radius);background:#FFFCF5}
+  .marca{font-weight:700;font-size:15px;white-space:nowrap}
+  .host-nav{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0;padding:0 8px}
+  .tab{font-size:13px;padding:6px 12px;border:1px solid var(--line);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;background:#EEF1F4;color:var(--ink-2)}
+  .tab.on{background:var(--card);color:var(--accent);font-weight:600;border-color:var(--accent);border-bottom:2px solid var(--card);position:relative;top:1px}
+
+  /* --- zonas reservadas de otros equipos --- */
+  .slot{border:2px dashed var(--otro);background:repeating-linear-gradient(45deg,#FFF8EC,#FFF8EC 8px,#FEF3DE 8px,#FEF3DE 16px);border-radius:var(--radius);padding:10px 12px;color:var(--warn);font-size:13px;position:relative}
+  .slot .tag{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+  .slot.inline{flex:1;min-width:180px}
+
+  /* --- nuestro módulo --- */
+  .modulo{border:2px solid var(--accent);border-radius:var(--radius);margin-top:0;background:var(--card)}
+  .modulo>.tag{display:block;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px}
+  .modulo-cuerpo{padding:14px}
+
+  .barra-filtros{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .select,.input{border:1px solid var(--line);border-radius:var(--radius);padding:7px 10px;font-size:13px;background:var(--card);color:var(--ink);min-width:150px}
+  .cuenta{font-size:12px;color:var(--ink-2);margin-left:auto}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px}
+  .tarjeta{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+  .img{height:96px;background:#E8ECF0;display:flex;align-items:center;justify-content:center;color:#A9B4BF;font-size:11px;letter-spacing:.06em}
+  .tarjeta .cuerpo{padding:9px 10px}
+  .nombre{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:4px}
+  .chip{display:inline-block;font-size:10px;padding:1px 7px;border-radius:20px;background:#EEF1F4;color:var(--ink-2)}
+  .precio{font-size:15px;font-weight:700;margin-top:6px}
+  .stock{font-size:11px;color:var(--ok)}
+  .stock.cero{color:var(--warn)}
+
+  .pag{display:flex;gap:5px;justify-content:center;align-items:center;margin-top:16px}
+  .pag span{border:1px solid var(--line);border-radius:var(--radius);padding:4px 10px;font-size:12px;color:var(--ink-2);background:var(--card)}
+  .pag span.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+
+  /* --- detalle --- */
+  .detalle{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:18px}
+  .detalle .img{height:200px}
+  .dato{font-size:13px;margin:5px 0}
+  .dato b{color:var(--ink-2);font-weight:600}
+  .banner{border-radius:var(--radius);padding:8px 11px;font-size:13px;margin-bottom:10px}
+  .banner.inactivo{background:#FDF4E6;border:1px solid #EBD3A6;color:var(--warn)}
+
+  /* --- formulario --- */
+  .campo{margin-bottom:12px}
+  .campo label{display:block;font-size:12px;font-weight:600;margin-bottom:3px}
+  .campo .input,.campo .select{width:100%}
+  .ayuda{font-size:11px;color:var(--ink-2);margin-top:3px}
+  .ayuda.mal{color:#B3261E}
+  .input.mal{border-color:#B3261E;background:#FDF3F2}
+  .fila{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .btn{border-radius:var(--radius);padding:7px 14px;font-size:13px;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:#fff}
+  .btn.sec{background:var(--card);color:var(--accent)}
+  .btn.peligro{background:var(--card);border-color:#B3261E;color:#B3261E}
+
+  /* --- estados --- */
+  .estados{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+  .estado{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:13px}
+  .estado h4{margin:0 0 7px;font-size:13px}
+  .vacio{border:1px dashed var(--line);border-radius:var(--radius);padding:18px;text-align:center;color:var(--ink-2);font-size:13px}
+  .skel{height:11px;background:linear-gradient(90deg,#E8ECF0,#F2F5F7,#E8ECF0);border-radius:3px;margin:6px 0}
+  .skel.corto{width:55%}
+  .err{border-left:3px solid #B3261E;background:#FDF3F2;padding:8px 11px;font-size:12px;border-radius:0 var(--radius) var(--radius) 0}
+  .err code{background:#F6DAD7}
+
+  /* --- notas de contrato --- */
+  .nota{border-left:3px solid var(--spec);background:#F7F4FB;padding:8px 12px;margin:10px 0;font-size:13px;border-radius:0 var(--radius) var(--radius) 0}
+  .nota b{color:var(--spec)}
+  .nota.pregunta{border-left-color:var(--warn);background:#FFFBF2}
+  .nota.pregunta b{color:var(--warn)}
+
+  .exito{border-left:3px solid var(--ok);background:#EFF7F3;padding:8px 11px;font-size:13px;border-radius:0 var(--radius) var(--radius) 0}
+  .dialogo{max-width:390px;margin:0 auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:0 6px 20px rgba(22,33,43,.16);padding:16px}
+  .dialogo h4{margin:0 0 6px;font-size:14px}
+  .minis{display:flex;gap:7px;margin-top:8px}
+  .mini{width:54px;height:42px;background:#E8ECF0;border:1px solid var(--line);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#A9B4BF}
+  .mini.on{border:2px solid var(--accent)}
+  .badge{display:inline-block;font-size:10px;padding:1px 8px;border-radius:20px}
+  .badge.act{background:#E7F3EE;color:var(--ok)}
+  .badge.ina{background:#FDF4E6;color:var(--warn)}
+  .acc{font-size:12px;color:var(--accent);font-weight:600;white-space:nowrap}
+  .acc.peligro{color:#B3261E}
+  table{width:100%;border-collapse:collapse;margin:12px 0;background:var(--card);font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#EEF1F4;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-2)}
+  ol.dec{padding-left:20px} ol.dec li{margin:9px 0;font-size:14px}
+  .pie{margin-top:46px;padding-top:14px;border-top:2px solid var(--line);font-size:12px;color:var(--ink-2)}
+  @media (max-width:700px){
+    .detalle{grid-template-columns:1fr}
+    .fila{grid-template-columns:1fr}
+    .doc{padding:20px 12px 60px}
+  }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Mockup — módulo Catálogo dentro del Host App</h1>
+  <div class="sub">Equipo B · versión 1.2 · 2026-09-21 · basado en el <b>contrato v2.2</b></div>
+
+  <div class="leyenda">
+    <b>Cómo leer este documento</b>
+    <ul>
+      <li><span class="pin" style="background:var(--accent)"></span><b>Azul:</b> lo que construye el Equipo B (módulo Catálogo). Todo lo azul sale del contrato.</li>
+      <li><span class="pin" style="background:var(--otro)"></span><b>Amarillo rayado:</b> espacio reservado para otro equipo. <b>No lo diseñamos nosotros</b>: queda marcado para que el Host App sepa que ahí va algo, pero su contenido y su comportamiento los define el equipo dueño.</li>
+      <li><span class="pin" style="background:var(--spec)"></span><b>Notas moradas:</b> la regla del contrato que obliga a que la pantalla se vea así.</li>
+      <li><span class="pin" style="background:var(--warn)"></span><b>Notas amarillas:</b> preguntas abiertas para la reunión de los 3 equipos. Están sin responder a propósito.</li>
+    </ul>
+  </div>
+
+  <h2>1. La pantalla completa</h2>
+  <p>Así se ve el Host App con el módulo de Catálogo cargado. El cascarón (encabezado y navegación) no es nuestro: es el contenedor donde cada equipo monta su módulo.</p>
+
+  <div class="pantalla">
+    <div class="chrome"><i></i><i></i><i></i><div class="url">tienda.uis.edu.co/catalogo</div></div>
+    <div class="host">
+
+      <div class="host-head">
+        <div class="marca">🛍️ Tienda Virtual</div>
+        <div class="slot inline"><span class="tag">Espacio reservado · Búsqueda (Equipo A)</span>Barra de búsqueda. Qué se busca, cómo se muestran los resultados y a dónde llevan lo define el Equipo A.</div>
+        <div class="slot" style="min-width:150px"><span class="tag">Reservado · Carro (Equipo C)</span>🛒 Ícono y contador</div>
+        <div class="slot" style="min-width:120px"><span class="tag">Reservado · Host App</span>Sesión / usuario</div>
+      </div>
+
+      <div class="host-nav">
+        <div class="tab on">Catálogo</div>
+        <div class="tab">Otros módulos del Host App</div>
+      </div>
+
+      <div class="modulo">
+        <span class="tag">Módulo Catálogo — Equipo B</span>
+        <div class="modulo-cuerpo">
+
+          <div class="barra-filtros">
+            <select class="select"><option>Todas las categorías</option><option>ropa</option><option>hogar</option><option>electrónica</option></select>
+            <span class="cuenta">48 productos · página 1 de 3</span>
+          </div>
+
+          <div class="grid">
+            <div class="tarjeta"><div class="img">IMAGEN</div><div class="cuerpo"><div class="nombre">Camiseta básica algodón</div><span class="chip">ropa</span><div class="precio">$ 49.900</div><div class="stock">120 disponibles</div></div></div>
+            <div class="tarjeta"><div class="img">IMAGEN</div><div class="cuerpo"><div class="nombre">Juego de sábanas 2 plazas</div><span class="chip">hogar</span><div class="precio">$ 129.900</div><div class="stock">14 disponibles</div></div></div>
+            <div class="tarjeta"><div class="img">IMAGEN</div><div class="cuerpo"><div class="nombre">Audífonos inalámbricos</div><span class="chip">electrónica</span><div class="precio">$ 219.000</div><div class="stock cero">Sin stock</div></div></div>
+            <div class="tarjeta"><div class="img">SIN IMAGEN</div><div class="cuerpo"><div class="nombre">Lámpara de escritorio LED</div><span class="chip">hogar</span><div class="precio">$ 89.900</div><div class="stock">7 disponibles</div></div></div>
+          </div>
+
+          <div class="pag"><span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota"><b>Contrato §2:</b> la primera página es la <b>1</b>, no la 0. <code>tamanoPagina</code> por defecto es 20 y no puede pasar de 100. Un valor fuera de rango no se envía nunca desde la interfaz: devolvería 400.</div>
+  <div class="nota"><b>Contrato §3:</b> cada producto trae el <b>id</b> de su categoría (<code>cat-ropa</code>), no el nombre. Para mostrar “ropa” hay que cruzar ese id con <code>GET /categorias</code>. Por eso el filtro se llena con esa misma llamada: se muestra el <code>nombre</code> y se envía el <code>id</code>.</div>
+  <div class="nota"><b>Contrato §2:</b> <code>GET /productos</code> devuelve <b>solo productos activos</b>. Un producto sin stock sí aparece en el listado (sigue activo); “Sin stock” es una etiqueta nuestra, no un estado del contrato.</div>
+  <div class="nota pregunta"><b>Por acordar:</b> el <b>buscador</b> del encabezado. Catálogo no expone búsqueda por texto —el contrato no la incluye—, así que qué pasa al escribir ahí es del Equipo A. Hay que definir si el resultado de una búsqueda abre una vista del módulo de Búsqueda o si reusa nuestra vista de detalle.</div>
+
+  <h2>2. Detalle del producto</h2>
+
+  <div class="pantalla">
+    <div class="chrome"><i></i><i></i><i></i><div class="url">tienda.uis.edu.co/catalogo/64f1a2b3c9e77a001f3d8e21</div></div>
+    <div class="host">
+      <div class="modulo">
+        <span class="tag">Módulo Catálogo — Equipo B</span>
+        <div class="modulo-cuerpo">
+          <div class="detalle">
+            <div>
+              <div class="img">IMAGEN</div>
+              <div class="minis"><div class="mini on">1</div><div class="mini">2</div><div class="mini">3</div></div>
+            </div>
+            <div>
+              <h3 style="margin-top:0;text-transform:none;letter-spacing:0;color:var(--ink);font-size:18px">Camiseta básica algodón</h3>
+              <span class="chip">ropa</span>
+              <div class="precio" style="font-size:22px">$ 49.900</div>
+              <div class="dato"><b>Disponibilidad:</b> 120 unidades</div>
+              <div class="dato"><b>Descripción:</b> Camiseta unisex 100% algodón, corte regular.</div>
+              <div class="dato" style="color:var(--ink-2);font-family:var(--mono);font-size:11px">id: 64f1a2b3c9e77a001f3d8e21</div>
+              <div class="slot" style="margin-top:14px"><span class="tag">Espacio reservado · Carro (Equipo C)</span>Botón “Agregar al carro” y selector de cantidad.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota"><b>Contrato §3:</b> <code>imagenes</code> es una <b>lista</b>, no una sola URL: el detalle muestra miniaturas cuando hay varias. También es opcional y puede venir vacía, así que toda vista necesita su imagen de relleno.</div>
+  <div class="nota"><b>Contrato §2:</b> <code>GET /productos/{id}</code> sí devuelve los productos desactivados, con <code>activo:false</code>. El 404 (<code>PRODUCTO_NO_ENCONTRADO</code>) es solo cuando el id no existe. Son dos pantallas distintas: la de abajo y la del estado 404.</div>
+
+  <h3>El mismo detalle, con el producto desactivado</h3>
+  <div class="pantalla"><div class="host"><div class="modulo"><span class="tag">Módulo Catálogo — Equipo B</span><div class="modulo-cuerpo">
+    <div class="banner inactivo"><b>Producto no disponible.</b> Este producto fue retirado del catálogo.</div>
+    <div class="detalle">
+      <div><div class="img" style="opacity:.55">IMAGEN</div></div>
+      <div>
+        <h3 style="margin-top:0;text-transform:none;letter-spacing:0;color:var(--ink-2);font-size:18px">Camiseta básica algodón</h3>
+        <span class="chip">ropa</span>
+        <div class="precio" style="font-size:22px;color:var(--ink-2)">$ 49.900</div>
+        <div class="dato"><b>Descripción:</b> Camiseta unisex 100% algodón, corte regular.</div>
+        <div class="slot" style="margin-top:14px;opacity:.6"><span class="tag">Reservado · Carro (Equipo C)</span>Aquí no debería poder agregarse al carro.</div>
+      </div>
+    </div>
+  </div></div></div></div>
+
+  <div class="nota pregunta"><b>Por acordar:</b> dónde vive el botón <b>“Agregar al carro”</b>. Puede estar en nuestra vista y emitir un evento que el Carro escucha, o puede inyectarlo el Host App en un espacio que nosotros dejamos. Nosotros no decidimos esto solos: es justo la clase de acoplamiento entre módulos que hay que acordar antes de programar.</div>
+  <div class="nota"><b>Contrato §7:</b> quien vaya a agregar al carro debe validar antes contra <code>GET /productos/{id}</code> que el producto exista, esté activo y tenga stock. Ese control lo hace el Carro; nuestra vista solo debe evitar ofrecer la acción cuando <code>activo:false</code>.</div>
+
+  <h2>3. Administración</h2>
+  <p>No está en el Host App público: es la pantalla interna con la que se mantiene el catálogo. Son dos vistas, no una: primero el listado desde donde se entra a editar o desactivar, y después el formulario.</p>
+
+  <h3>3.1 Listado de administración</h3>
+  <div class="pantalla">
+    <div class="chrome"><i></i><i></i><i></i><div class="url">tienda.uis.edu.co/catalogo/admin</div></div>
+    <div class="host"><div class="modulo"><span class="tag">Módulo Catálogo — Equipo B</span><div class="modulo-cuerpo">
+      <div class="barra-filtros">
+        <select class="select"><option>Todas las categorías</option><option>ropa</option><option>hogar</option><option>electrónica</option></select>
+        <button class="btn" style="margin-left:auto">+ Nuevo producto</button>
+      </div>
+      <table>
+        <tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr>
+        <tr><td>Camiseta básica algodón</td><td>ropa</td><td>$ 49.900</td><td>120</td><td><span class="badge act">Activo</span></td><td><span class="acc">Editar</span> · <span class="acc peligro">Desactivar</span></td></tr>
+        <tr><td>Juego de sábanas 2 plazas</td><td>hogar</td><td>$ 129.900</td><td>14</td><td><span class="badge act">Activo</span></td><td><span class="acc">Editar</span> · <span class="acc peligro">Desactivar</span></td></tr>
+        <tr><td>Audífonos inalámbricos</td><td>electrónica</td><td>$ 219.000</td><td>0</td><td><span class="badge act">Activo</span></td><td><span class="acc">Editar</span> · <span class="acc peligro">Desactivar</span></td></tr>
+      </table>
+      <div class="pag"><span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div>
+    </div></div></div>
+  </div>
+
+  <div class="nota pregunta"><b>Hueco del contrato, para la reunión del equipo:</b> esta tabla se llena con <code>GET /productos</code>, que <b>solo devuelve activos</b> (§2). Es decir que hoy <b>un administrador no tiene forma de ver los productos que desactivó</b>: desaparecen de su vista y solo se llega a ellos si alguien guardó el id. Si queremos que se puedan ver, falta un filtro (<code>?activo=false</code>) — y eso es agregarle algo al contrato, con su cambio de versión, no una decisión que tomemos en el frontend.</div>
+
+  <h3>3.2 Confirmar antes de desactivar</h3>
+  <div class="pantalla"><div class="host" style="background:#EDF0F3;padding:22px">
+    <div class="dialogo">
+      <h4>¿Desactivar “Camiseta básica algodón”?</h4>
+      <p style="font-size:13px;color:var(--ink-2);margin:0 0 4px">Dejará de aparecer en el listado público y en la tienda.</p>
+      <p style="font-size:13px;color:var(--warn);margin:0"><b>No se puede deshacer desde la aplicación.</b></p>
+      <div class="btns" style="justify-content:flex-end"><button class="btn sec">Cancelar</button><button class="btn peligro">Desactivar</button></div>
+    </div>
+  </div></div>
+
+  <div class="nota pregunta"><b>El otro hueco del contrato:</b> hoy <b>no hay manera de volver a activar un producto</b>. <code>DELETE</code> pone <code>activo:false</code> y <code>PUT</code> ignora el campo <code>activo</code> a propósito (§2), así que no existe el camino de vuelta. Por eso el diálogo dice que no se puede deshacer: sería mentir si dijera otra cosa. Habría que decidir en equipo si se agrega esa operación al contrato o si se deja así a propósito.</div>
+
+  <h3>3.3 Crear y editar</h3>
+
+  <div class="pantalla">
+    <div class="chrome"><i></i><i></i><i></i><div class="url">tienda.uis.edu.co/catalogo/admin/nuevo</div></div>
+    <div class="host"><div class="modulo"><span class="tag">Módulo Catálogo — Equipo B</span><div class="modulo-cuerpo">
+      <div class="campo"><label>Nombre *</label><input class="input" value="Camiseta básica algodón"><div class="ayuda">24 / 120 caracteres</div></div>
+      <div class="campo"><label>Descripción</label><input class="input" value="Camiseta unisex 100% algodón, corte regular."><div class="ayuda">Opcional</div></div>
+      <div class="fila">
+        <div class="campo"><label>Precio *</label><input class="input" value="49900"><div class="ayuda">Mayor que 0</div></div>
+        <div class="campo"><label>Stock *</label><input class="input" value="120"><div class="ayuda">0 o más</div></div>
+      </div>
+      <div class="fila">
+        <div class="campo"><label>Categoría *</label><select class="select"><option>ropa</option><option>hogar</option><option>electrónica</option></select><div class="ayuda">Viene de GET /categorias</div></div>
+        <div class="campo"><label>Imágenes</label><input class="input" value="https://cdn.tienda.com/img/camiseta-1.jpg"><div class="ayuda">Opcional · una URL por línea</div></div>
+      </div>
+      <div class="btns"><button class="btn">Guardar</button><button class="btn sec">Cancelar</button><button class="btn peligro">Desactivar producto</button></div>
+    </div></div></div>
+  </div>
+
+  <div class="nota"><b>Contrato §3:</b> las reglas del formulario son exactamente las del modelo: nombre obligatorio de máximo 120 caracteres, precio mayor que 0, stock 0 o más, categoría que exista en <code>GET /categorias</code>; descripción e imágenes opcionales. La validación del navegador solo sirve para avisar rápido: <b>la que manda es la del backend</b>.</div>
+  <div class="nota"><b>Historia 4:</b> “actualizarlo no cambia su estado: si estaba inactivo, sigue inactivo”. O sea que el formulario también se abre sobre un producto desactivado, y en ese caso tiene que avisarlo —igual que el detalle— para que nadie crea que al guardar lo está volviendo a publicar. Guardar no lo reactiva.</div>
+  <div class="nota"><b>Contrato §2:</b> <code>PUT</code> <b>reemplaza el producto completo</b>. Al editar, el formulario carga todos los campos y los envía todos: si se omite la descripción, esa descripción se borra. <code>id</code> y <code>activo</code> se ignoran aunque se envíen.</div>
+  <h3>3.4 Cuando la operación sale bien</h3>
+  <div class="estados">
+    <div class="estado"><h4>Creado · 201</h4><div class="exito"><b>Producto creado.</b> Ya aparece en el catálogo.</div><div class="ayuda"><code>POST</code> devuelve el producto con su <code>id</code> asignado, así que desde aquí se puede ir directo a su detalle.</div></div>
+    <div class="estado"><h4>Actualizado · 200</h4><div class="exito"><b>Cambios guardados.</b></div><div class="ayuda"><code>PUT</code> devuelve el producto ya actualizado: la vista se refresca con esa respuesta, sin volver a pedirlo.</div></div>
+    <div class="estado"><h4>Desactivado · 204</h4><div class="exito"><b>Producto desactivado.</b></div><div class="ayuda">204 viene <b>sin cuerpo</b>: no hay datos que mostrar, solo confirmar y volver al listado.</div></div>
+  </div>
+
+  <div class="nota"><b>Contrato §2:</b> “Desactivar” llama a <code>DELETE</code>, que responde <b>204 sin cuerpo</b> y es idempotente: repetirlo no es un error ni vuelve a publicar el evento. Debe pedir confirmación, porque el producto desaparece del listado público.</div>
+
+  <h2>4. Estados que toda vista debe tener</h2>
+  <p>No son adornos: cada uno corresponde a una respuesta que el backend puede dar hoy.</p>
+
+  <div class="estados">
+    <div class="estado"><h4>Cargando</h4><div class="skel"></div><div class="skel"></div><div class="skel corto"></div><div class="ayuda">Mientras la llamada está en curso. Nunca una pantalla en blanco.</div></div>
+    <div class="estado"><h4>Lista vacía · 200</h4><div class="vacio">No hay productos en esta categoría.</div><div class="ayuda">Una categoría sin productos responde 200 con <code>total: 0</code>, no un error.</div></div>
+    <div class="estado"><h4>No encontrado · 404</h4><div class="err"><b>No existe un producto con id 123</b><br><code>PRODUCTO_NO_ENCONTRADO</code></div><div class="ayuda">La interfaz reacciona al <b>código</b>, no al texto del mensaje.</div></div>
+    <div class="estado"><h4>Validación · 400</h4><div class="campo" style="margin:0"><label>Precio *</label><input class="input mal" value="-100"><div class="ayuda mal">precio: debe ser mayor que 0</div></div><div class="ayuda"><code>VALIDACION_FALLIDA</code>: el mensaje del backend se muestra junto al campo.</div></div>
+    <div class="estado"><h4>Sin conexión</h4><div class="err">No se pudo conectar con el servidor. <b>Reintentar</b></div><div class="ayuda">Cuando no hay respuesta: ni 200 ni error del contrato.</div></div>
+  </div>
+
+  <div class="nota"><b>Contrato §4:</b> todos los errores llegan como <code>{ "codigo": "...", "mensaje": "..." }</code>. Los códigos de esta entrega son <code>PRODUCTO_NO_ENCONTRADO</code> (404) y <code>VALIDACION_FALLIDA</code> (400). Cualquier otra cosa se trata como error inesperado.</div>
+
+  <h2>5. Mapa de rutas</h2>
+  <p>Lo que F1 necesita para configurar el enrutador, y lo que hay que reservar en el Host App para que las rutas de los tres módulos no choquen.</p>
+  <table>
+    <tr><th>Ruta</th><th>Vista</th><th>Qué llama</th></tr>
+    <tr><td><code>/catalogo</code></td><td>Listado público</td><td><code>GET /productos</code> + <code>GET /categorias</code></td></tr>
+    <tr><td><code>/catalogo/:id</code></td><td>Detalle</td><td><code>GET /productos/{id}</code></td></tr>
+    <tr><td><code>/catalogo/admin</code></td><td>Listado de administración</td><td><code>GET /productos</code></td></tr>
+    <tr><td><code>/catalogo/admin/nuevo</code></td><td>Crear</td><td><code>GET /categorias</code> + <code>POST /productos</code></td></tr>
+    <tr><td><code>/catalogo/admin/:id</code></td><td>Editar</td><td><code>GET /productos/{id}</code> + <code>PUT /productos/{id}</code></td></tr>
+  </table>
+  <div class="nota"><b>El filtro y la página van en la URL</b> (<code>/catalogo?categoria=cat-ropa&amp;pagina=2</code>). Así, recargar la página o compartir el enlace conserva lo que el usuario estaba viendo, en vez de devolverlo a la página 1.</div>
+  <div class="nota"><b>Contrato §2:</b> <code>POST</code>, <code>PUT</code> y <code>DELETE</code> están marcados como <b>Admin</b>, pero Keycloak no se integra en esta entrega y los endpoints todavía no validan token. En la práctica: las rutas <code>/catalogo/admin/*</code> no se enlazan desde la navegación pública, y cuando entre Keycloak se les pone el guardia de verdad. Conviene decirlo en la sustentación antes de que lo pregunten.</div>
+
+  <h2>6. Qué es nuestro y qué no</h2>
+  <table>
+    <tr><th>Zona</th><th>Dueño</th><th>Qué asumimos</th></tr>
+    <tr><td>Listado, detalle y administración de productos</td><td><b>Equipo B</b></td><td>Todo: vistas, estados y llamadas. Sale del contrato v2.2</td></tr>
+    <tr><td>Barra de búsqueda del encabezado</td><td>Equipo A</td><td><b>Nada.</b> Dejamos el espacio; el comportamiento lo definen ellos</td></tr>
+    <tr><td>Ícono del carro y “Agregar al carro”</td><td>Equipo C</td><td><b>Nada.</b> Dejamos el espacio y evitamos ofrecer la acción si el producto está inactivo</td></tr>
+    <tr><td>Encabezado, navegación, sesión y rutas</td><td>Host App</td><td><b>Nada.</b> Nuestro módulo se monta dentro y no pinta el cascarón</td></tr>
+  </table>
+
+  <h2>7. Lo que no lleva, y por qué</h2>
+  <p>Lo que un catálogo de verdad tendría y aquí no va. No es olvido: cada fila dice qué lo impide.</p>
+  <table>
+    <tr><th>Cosa</th><th>Por qué no</th></tr>
+    <tr><td>Búsqueda por texto</td><td>El contrato no expone ningún endpoint de búsqueda: eso es el módulo del Equipo A</td></tr>
+    <tr><td>Ordenar por precio o por nombre</td><td><code>GET /productos</code> no tiene parámetro de orden. Agregarlo es cambiar el contrato</td></tr>
+    <tr><td>Filtrar por rango de precio o por stock</td><td>El único filtro del contrato es <code>?categoria=</code></td></tr>
+    <tr><td>Crear, editar o borrar categorías</td><td>Contrato §8: vienen precargadas y solo se listan</td></tr>
+    <tr><td>Tallas y colores (variantes)</td><td>Contrato §8: fuera de alcance. Entrarían como v3.0, que rompe compatibilidad</td></tr>
+    <tr><td>Inicio de sesión y roles</td><td>Keycloak no se integra en esta entrega</td></tr>
+    <tr><td>Carrito, favoritos, reseñas, comparador</td><td>No son de Catálogo</td></tr>
+  </table>
+
+  <h2>8. Lo que hay que acordar entre los 3 equipos</h2>
+  <p>Esto es lo que el mockup deja abierto a propósito. El contrato §9 ya dice que el mecanismo de integración está <b>pendiente de decidir</b>; el resto son consecuencias de esa misma decisión.</p>
+
+  <ol class="dec">
+    <li><b>Mecanismo de integración.</b> Cómo carga el Host App cada módulo: Module Federation (los 3 usamos Vue, así que el módulo se carga en caliente y comparte enrutador), componentes web (más aislado, funciona incluso con frameworks distintos) o composición por rutas (lo más simple: cada módulo es su propia página). <i>Nuestra propuesta:</i> Module Federation, porque ya acordamos Vue para los 3 y es lo que se entiende por microfrontend; el costo es que los 3 tenemos que usar la misma versión de Vue y alinear la configuración de build.</li>
+    <li><b>Quién es dueño del Host App</b> y mantiene el encabezado, la navegación y las rutas.</li>
+    <li><b>Espacio de nombres de rutas.</b> Proponemos que todo lo nuestro cuelgue de <code>/catalogo/*</code>, para que las rutas de los tres módulos no choquen.</li>
+    <li><b>Estilo compartido.</b> Si cada equipo elige sus colores, el Host App se ve como tres páginas pegadas. Lo más barato es acordar media docena de variables CSS (color de acento, texto, borde, fondo, radio y tipografía) en vez de una librería de componentes: una librería pesada, repetida en tres módulos, tiene que declararse como dependencia compartida o se descarga tres veces. En este mockup ya hay una paleta que podemos proponer.</li>
+    <li><b>El botón “Agregar al carro”:</b> ¿lo pinta Catálogo y emite un evento, o lo inyecta el Host App en un espacio nuestro?</li>
+    <li><b>Estado compartido:</b> sesión del usuario y contador del carro. Qué módulo lo guarda y cómo se entera el resto.</li>
+    <li><b>Kong:</b> el base path de cada módulo y la configuración de CORS. Para desarrollo proponemos el proxy de Vite; en integración, el plugin de CORS de Kong, y no configurarlo también en Spring, porque las cabeceras se duplican y el navegador rechaza la respuesta.</li>
+  </ol>
+
+  <div class="nota"><b>Ojo con el contrato:</b> nada de esto cambia el contrato de servicio v2.2 — endpoints, modelos y eventos quedan igual, así que los equipos A y C no tienen que tocar su integración por REST. Lo que se acuerde aquí actualiza la sección §9 del contrato, y eso se hace <b>después</b> de la reunión, con su cambio de versión y su fila en el historial.</div>
+
+  <h2>9. Las 6 historias, vista por vista</h2>
+  <p>Dónde queda cubierta cada historia del backlog, y el criterio de aceptación que más fácil se pasa por alto en cada una.</p>
+  <table>
+    <tr><th>Historia</th><th>Dónde se ve</th><th>El criterio que se suele olvidar</th></tr>
+    <tr><td><b>1</b> — Registrar producto</td><td>§3.3 formulario · §3.4 creado</td><td>El 201 devuelve el producto ya con su <code>id</code>: se usa esa respuesta, no se vuelve a pedir la lista</td></tr>
+    <tr><td><b>2</b> — Listar productos</td><td>§1 listado</td><td>Los desactivados no aparecen, y la primera página es la <b>1</b></td></tr>
+    <tr><td><b>3</b> — Ver detalle</td><td>§2 detalle y su variante desactivada</td><td>Un producto inactivo <b>se muestra</b> con <code>activo:false</code>; no es un 404</td></tr>
+    <tr><td><b>4</b> — Actualizar producto</td><td>§3.3 formulario en modo edición</td><td>Se envía el producto <b>completo</b>, y guardar no reactiva: si estaba inactivo, sigue inactivo</td></tr>
+    <tr><td><b>5</b> — Desactivar producto</td><td>§3.1 acción · §3.2 confirmación · §3.4 desactivado</td><td>Repetirlo responde con éxito sin cambiar nada, y el registro no se borra</td></tr>
+    <tr><td><b>6</b> — Listar categorías</td><td>§1 filtro · §3.3 selector</td><td>Se muestra el <code>nombre</code> y se envía el <code>id</code></td></tr>
+  </table>
+  <div class="nota"><b>Las 6 historias tienen frontend.</b> Las 1, 4 y 5 son de administrador y viven en §3; las 2, 3 y 6 son de cliente y viven en §1 y §2. Ninguna historia se queda sin pantalla, y ninguna pantalla existe sin historia que la respalde.</div>
+
+  <h2>10. Criterios de entrega</h2>
+  <table>
+    <tr><th>Criterio</th><th>Por qué</th></tr>
+    <tr><td>Los datos salen de los endpoints reales</td><td>Contrato §9: nada de datos inventados en el código</td></tr>
+    <tr><td>Las 3 vistas existen y funcionan</td><td>Historias 1 a 5 del backlog</td></tr>
+    <tr><td>Los 5 estados están implementados</td><td>Son respuestas reales del backend, no casos raros</td></tr>
+    <tr><td>La paginación empieza en 1</td><td>Contrato §2: enviar <code>pagina=0</code> da 400</td></tr>
+    <tr><td>La categoría se muestra por nombre</td><td>El producto trae el id; el nombre sale de <code>GET /categorias</code></td></tr>
+    <tr><td>Toda operación que sale bien avisa</td><td>201, 200 y 204 deben verse, no solo los errores</td></tr>
+    <tr><td>Desactivar pide confirmación</td><td>No hay vuelta atrás en el contrato actual</td></tr>
+    <tr><td>Los espacios de otros equipos quedan marcados</td><td>Para que el Host App tenga dónde montarlos sin rehacer nuestras vistas</td></tr>
+  </table>
+
+  <div class="pie">
+    Equipo B · módulo Catálogo · Ingeniería de Software II, UIS.<br>
+    Documentos de referencia: contrato v2.2, historias v1.1 y arquitectura v1.3, en el repositorio <b>teambsoft-backend</b>.
+  </div>
+
+</div>
+</body>
+</html>
