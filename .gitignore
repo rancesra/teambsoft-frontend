@@ -1,0 +1,21 @@
+# Dependencias: se regeneran con npm install y pesan cientos de MB
+node_modules/
+
+# Resultado de compilar
+dist/
+dist-ssr/
+
+# Variables de entorno locales (VITE_API_URL de cada quien)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor y sistema operativo
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
