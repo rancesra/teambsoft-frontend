@@ -133,7 +133,7 @@
 <div class="doc">
 
   <h1>Mockup — módulo Catálogo dentro del Host App</h1>
-  <div class="sub">Equipo B · versión 1.2 · 2026-09-21 · basado en el <b>contrato v2.2</b></div>
+  <div class="sub">Equipo B · versión 1.3 · 2026-09-23 · basado en el <b>contrato v2.2</b></div>
 
   <div class="leyenda">
     <b>Cómo leer este documento</b>
@@ -262,19 +262,19 @@
     </div></div></div>
   </div>
 
-  <div class="nota pregunta"><b>Hueco del contrato, para la reunión del equipo:</b> esta tabla se llena con <code>GET /productos</code>, que <b>solo devuelve activos</b> (§2). Es decir que hoy <b>un administrador no tiene forma de ver los productos que desactivó</b>: desaparecen de su vista y solo se llega a ellos si alguien guardó el id. Si queremos que se puedan ver, falta un filtro (<code>?activo=false</code>) — y eso es agregarle algo al contrato, con su cambio de versión, no una decisión que tomemos en el frontend.</div>
+  <div class="nota"><b>Resuelto en el contrato v2.3:</b> esta tabla se llena con <code>GET /productos?activo=</code>, que acepta <code>true</code> (por defecto), <code>false</code> o <code>todos</code>. Cuando se dibujó este mockup el parámetro no existía y un administrador no tenía forma de volver a encontrar lo que desactivaba; se agregó como Historia 8. El escaparate público no envía el parámetro nunca, y por eso sigue viendo solo los activos.</div>
 
   <h3>3.2 Confirmar antes de desactivar</h3>
   <div class="pantalla"><div class="host" style="background:#EDF0F3;padding:22px">
     <div class="dialogo">
       <h4>¿Desactivar “Camiseta básica algodón”?</h4>
       <p style="font-size:13px;color:var(--ink-2);margin:0 0 4px">Dejará de aparecer en el listado público y en la tienda.</p>
-      <p style="font-size:13px;color:var(--warn);margin:0"><b>No se puede deshacer desde la aplicación.</b></p>
+      <p style="font-size:13px;color:var(--ink-2);margin:0">Podrás reactivarlo después desde el filtro <b>Retirados</b>.</p>
       <div class="btns" style="justify-content:flex-end"><button class="btn sec">Cancelar</button><button class="btn peligro">Desactivar</button></div>
     </div>
   </div></div>
 
-  <div class="nota pregunta"><b>El otro hueco del contrato:</b> hoy <b>no hay manera de volver a activar un producto</b>. <code>DELETE</code> pone <code>activo:false</code> y <code>PUT</code> ignora el campo <code>activo</code> a propósito (§2), así que no existe el camino de vuelta. Por eso el diálogo dice que no se puede deshacer: sería mentir si dijera otra cosa. Habría que decidir en equipo si se agrega esa operación al contrato o si se deja así a propósito.</div>
+  <div class="nota"><b>Resuelto en el contrato v2.3:</b> cuando se dibujó este mockup no había forma de volver a activar un producto —<code>DELETE</code> pone <code>activo:false</code> y <code>PUT</code> ignora ese campo a propósito—, así que el diálogo decía que no se podía deshacer. La v2.3 agregó <code>POST /productos/{id}/activar</code> (Historia 7), que también pedía el Equipo A para su evento de reactivación. Por eso ahora la confirmación puede prometer la vuelta.</div>
 
   <h3>3.3 Crear y editar</h3>
 
@@ -392,7 +392,7 @@
     <tr><td>La paginación empieza en 1</td><td>Contrato §2: enviar <code>pagina=0</code> da 400</td></tr>
     <tr><td>La categoría se muestra por nombre</td><td>El producto trae el id; el nombre sale de <code>GET /categorias</code></td></tr>
     <tr><td>Toda operación que sale bien avisa</td><td>201, 200 y 204 deben verse, no solo los errores</td></tr>
-    <tr><td>Desactivar pide confirmación</td><td>No hay vuelta atrás en el contrato actual</td></tr>
+    <tr><td>Desactivar pide confirmación</td><td>Saca el producto del catálogo público; se reactiva desde el filtro Retirados</td></tr>
     <tr><td>Los espacios de otros equipos quedan marcados</td><td>Para que el Host App tenga dónde montarlos sin rehacer nuestras vistas</td></tr>
   </table>
 
