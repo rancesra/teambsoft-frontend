@@ -110,6 +110,6 @@ npm run dev
 ## 5. Antes de programar
 
 1. Lee el [contrato](https://github.com/rancesra/teambsoft-backend/blob/main/docs/CONTRATO-CATALOGO.md). Es el acuerdo con los equipos A y C: define los endpoints, qué devuelven y cómo llegan los errores. No se cambia sin consultarlo.
-2. Abre el [mockup](docs/mockup-frontend-catalogo.html) en el navegador: ahí están las tres vistas con las reglas del contrato anotadas.
-3. Busca tu tarea en el [plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/PLAN-DE-TRABAJO.md).
+2. Abre los dos mockups de `docs/` en el navegador: el [del módulo dentro del Host App](docs/mockup-catalogo-hostapp.html), que dice qué lleva cada pantalla y por qué, y la [propuesta visual](docs/propuesta-visual-catalogo.html), que dice cómo se ve. En GitHub se ven como código: hay que abrirlos desde tu copia.
+3. Busca tu tarea en el [plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/docs/PLAN-DE-TRABAJO.md).
 4. Lee la [guía de git](GUIA-GIT.md): cómo crear tu rama, qué hacer cada día y cómo entregar tu tarea con un pull request.

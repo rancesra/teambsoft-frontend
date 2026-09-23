@@ -19,17 +19,16 @@ La documentación del módulo vive **en el repositorio del backend**, para que n
 
 ## Documentación
 
-**¿Vas a empezar?** Lee en este orden: [guía de inicio](GUIA-INICIO.md) → [plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/PLAN-DE-TRABAJO.md) → [guía de git](GUIA-GIT.md).
+**¿Vas a empezar?** Lee en este orden: [guía de inicio](GUIA-INICIO.md) → [plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/docs/PLAN-DE-TRABAJO.md) → [guía de git](GUIA-GIT.md).
 
 | Documento | Para qué te sirve |
 |---|---|
 | [Contrato de servicio (v2.2)](https://github.com/rancesra/teambsoft-backend/blob/main/docs/CONTRATO-CATALOGO.md) | **El más importante.** Qué endpoints hay, qué devuelven, qué validaciones aplican y cómo llegan los errores |
 | [Historias de usuario](https://github.com/rancesra/teambsoft-backend/blob/main/docs/HISTORIAS.md) | Qué debe poder hacer el usuario y con qué criterios se acepta cada historia |
-| [Plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/PLAN-DE-TRABAJO.md) | Tu tarea (F1, F2 o F3), de qué depende y cómo verificar que terminó |
+| [Plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/docs/PLAN-DE-TRABAJO.md) | Tu tarea (F1, F2 o F3), de qué depende y cómo verificar que terminó |
 | [Arquitectura](https://github.com/rancesra/teambsoft-backend/blob/main/docs/ARQUITECTURA-CATALOGO.md) | Dónde encaja este módulo dentro del sistema |
 | [Propuesta visual](docs/propuesta-visual-catalogo.html) | **Cómo se ve.** Las pantallas con su acabado final y las once variables de estilo que proponemos a los 3 equipos |
 | [Mockup del módulo en el Host App](docs/mockup-catalogo-hostapp.html) | **Qué lleva y por qué.** Las pantallas con las reglas del contrato anotadas, los espacios reservados para Búsqueda y Carro, el mapa de rutas y las 6 historias |
-| [Mockup de las vistas](docs/mockup-frontend-catalogo.html) | Las tres vistas dibujadas, con las reglas del contrato anotadas en cada pantalla. Ábrelo en el navegador desde tu copia del repo (doble clic). Es una copia del original, que vive en el repositorio del backend: si hay que cambiarlo, se cambia allá primero |
 
 ## La API que consume
 
