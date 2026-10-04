@@ -67,7 +67,7 @@ En Windows (PowerShell) son los mismos comandos.
 
 - [X] F1 — Base del frontend (proyecto Vue, rutas, cliente HTTP, manejo de errores)
 - [ ] F2 — Vistas de lectura (listado y detalle)
-- [ ] F3 — Vistas de administración (crear, editar y desactivar)
+- [X] F3 — Vistas de administración (crear, editar y desactivar)
 - [ ] Integración con el backend a través de Kong
 
 ## Equipo — frente de frontend
