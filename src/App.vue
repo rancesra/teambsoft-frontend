@@ -1,14 +1,17 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+
+// Dentro del Host App, el módulo corre en un iframe y el encabezado lo pone el cascarón. Si el módulo
+// pintara también el suyo, se verían dos (contrato del Host App v1.1, sección 4).
+const embebido = window.self !== window.top
 </script>
 
 <template>
   <!--
-    Este encabezado solo se ve cuando el módulo corre solo (npm run dev). Dentro del Host App, el
-    encabezado y el menú los pone el cascarón y este bloque no se monta: el Host App importa las
-    rutas del módulo, no este componente (contrato del Host App, sección 4).
+    Este encabezado solo se ve cuando el módulo corre solo (npm run dev en este repositorio).
+    Dentro del Host App no se monta: el cascarón ya pone el suyo arriba.
   -->
-  <header class="barra">
+  <header v-if="!embebido" class="barra">
     <div class="contenedor barra-dentro">
       <span class="marca">Catálogo</span>
       <nav>
