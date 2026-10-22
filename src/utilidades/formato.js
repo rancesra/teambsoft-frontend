@@ -8,7 +8,7 @@ export function enPesos(valor) {
 }
 
 export function nombreDeCategoria(idCategoria, categorias) {
-  if (!categorias || categorias.length === 0) return '...';
+  if (!categorias || categorias.length === 0) return idCategoria;
   const categoria = categorias.find((c) => c.id === idCategoria);
-  return categoria ? categoria.nombre : 'Sin categoría';
+  return categoria ? categoria.nombre : idCategoria;
 }
