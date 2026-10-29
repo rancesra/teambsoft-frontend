@@ -54,7 +54,7 @@ const paginas = computed(() => Array.from({ length: ultimaPagina.value }, (_, i)
 .pagina.actual {
   background: var(--acento);
   border-color: var(--acento);
-  color: #fff;
+  color: var(--texto-sobre-acento);
   font-weight: 700;
 }
 

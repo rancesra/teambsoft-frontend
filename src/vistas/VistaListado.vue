@@ -151,7 +151,7 @@ h1 {
 .chip.activo {
   background: var(--acento);
   border-color: var(--acento);
-  color: #fff;
+  color: var(--texto-sobre-acento);
 }
 
 .rejilla {

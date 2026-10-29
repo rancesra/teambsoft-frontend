@@ -19,7 +19,7 @@ defineProps({ cuantas: { type: Number, default: 8 } })
 
 .esqueleto {
   height: 240px;
-  background: linear-gradient(90deg, #f5f5f4, #edebe9, #f5f5f4);
+  background: linear-gradient(90deg, var(--fondo-suave), #edebe9, var(--fondo-suave));
   background-size: 200% 100%;
   animation: brillo 1.4s infinite;
   box-shadow: none;

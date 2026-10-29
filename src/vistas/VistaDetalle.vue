@@ -126,7 +126,7 @@ watch(() => props.id, cargar, { immediate: true })
 
 .foto-grande {
   aspect-ratio: 1;
-  background: #f0efed;
+  background: var(--fondo-suave);
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   display: grid;
@@ -147,7 +147,7 @@ watch(() => props.id, cargar, { immediate: true })
 
 .sin-foto {
   font-size: 12px;
-  color: #a8a29e;
+  color: var(--texto-suave);
 }
 
 .miniaturas {
@@ -178,8 +178,8 @@ watch(() => props.id, cargar, { immediate: true })
 }
 
 .retirado-aviso {
-  background: #fdf4e6;
-  border: 1px solid #ebd3a6;
+  background: var(--aviso-suave);
+  border: 1px solid var(--aviso-borde);
   color: var(--aviso);
   border-radius: var(--radio-chico);
   padding: 10px 13px;
@@ -212,7 +212,7 @@ h1.apagado,
 }
 
 .stock.sin {
-  background: #f5f5f4;
+  background: var(--fondo-suave);
   color: var(--texto-suave);
 }
 
@@ -252,13 +252,13 @@ h1.apagado,
 
 .caja {
   aspect-ratio: 1;
-  background: #f0efed;
+  background: var(--fondo-suave);
   border-radius: var(--radio);
 }
 
 .linea {
   height: 16px;
-  background: #f0efed;
+  background: var(--fondo-suave);
   border-radius: 999px;
   margin-bottom: 12px;
 }

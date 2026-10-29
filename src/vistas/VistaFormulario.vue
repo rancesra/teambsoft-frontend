@@ -244,8 +244,8 @@ small.mal {
 }
 
 .retirado {
-  background: #fdf4e6;
-  border: 1px solid #ebd3a6;
+  background: var(--aviso-suave);
+  border: 1px solid var(--aviso-borde);
   color: var(--aviso);
   border-radius: var(--radio-chico);
   padding: 12px 15px;
