@@ -44,7 +44,7 @@ const estadoStock = computed(() => {
 
 .foto {
   aspect-ratio: 4 / 3;
-  background: #f0efed;
+  background: var(--fondo-suave);
   display: grid;
   place-items: center;
 }
@@ -57,7 +57,7 @@ const estadoStock = computed(() => {
 
 .sin-foto {
   font-size: 11px;
-  color: #a8a29e;
+  color: var(--texto-suave);
   letter-spacing: 0.06em;
 }
 
@@ -105,12 +105,12 @@ h3 {
 }
 
 .stock.poco {
-  background: #fffbeb;
+  background: var(--aviso-suave);
   color: var(--aviso);
 }
 
 .stock.sin {
-  background: #f5f5f4;
+  background: var(--fondo-suave);
   color: var(--texto-suave);
 }
 </style>

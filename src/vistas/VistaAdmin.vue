@@ -203,7 +203,7 @@ h1 {
 .chip.activo {
   background: var(--acento);
   border-color: var(--acento);
-  color: #fff;
+  color: var(--texto-sobre-acento);
 }
 
 .tabla {
@@ -214,7 +214,7 @@ h1 {
 }
 
 th {
-  background: #f5f5f4;
+  background: var(--fondo-suave);
   text-align: left;
   font-size: 11px;
   text-transform: uppercase;
@@ -254,7 +254,7 @@ td {
 }
 
 .estado.ina {
-  background: #f5f5f4;
+  background: var(--fondo-suave);
   color: var(--texto-suave);
 }
 
