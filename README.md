@@ -51,23 +51,29 @@ Tres reglas del contrato que se notan en la interfaz:
 
 ## Cómo ejecutar
 
-> El proyecto de Vue todavía no existe: lo crea **F1** (ver el plan de trabajo). Cuando su pull request entre a `main`, estos son los comandos.
+> Comandos para instalar, ejecutar y verificar el proyecto:
 
 ```bash
 npm install     # instala las dependencias (la primera vez y cada vez que cambien)
 npm run dev     # arranca el servidor de desarrollo en http://localhost:5173
 npm run build   # compila para producción; sirve para comprobar que todo compila
+npm test   # corre las pruebas automáticas (Vitest)
 ```
 
 En Windows (PowerShell) son los mismos comandos.
 
 **Requisito:** Node.js en versión LTS. La instalación paso a paso está en la [guía de inicio](GUIA-INICIO.md).
 
+### Cómo se prueban las vistas
+
+Las pruebas simulan `fetch` globalmente para controlar las respuestas del backend, inyectan un enrutador en memoria y esperan a que la interfaz se actualice con `flushPromises()`. Como regla, *una prueba que nunca falla no prueba nada: rómpela a propósito una vez*.
+
 ## Estado — Segunda entrega
 
 - [X] F1 — Base del frontend (proyecto Vue, rutas, cliente HTTP, manejo de errores)
 - [X] F2 — Vistas de lectura (listado y detalle)
 - [X] F3 — Vistas de administración (crear, editar y desactivar)
+- Pruebas automatizadas: **31**
 - [ ] Integración con el backend a través de Kong
 
 ## Equipo — frente de frontend
