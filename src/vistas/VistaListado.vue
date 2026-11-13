@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 
 import { api } from '@/api/cliente'
 import CargandoTarjetas from '@/componentes/CargandoTarjetas.vue'
@@ -8,6 +8,7 @@ import EstadoVacio from '@/componentes/EstadoVacio.vue'
 import MensajeError from '@/componentes/MensajeError.vue'
 import PaginadorProductos from '@/componentes/PaginadorProductos.vue'
 import TarjetaProducto from '@/componentes/TarjetaProducto.vue'
+import { esAdmin } from '@/utilidades/sesion'
 
 const TAMANO_PAGINA = 20
 
@@ -65,6 +66,8 @@ watch([categoria, pagina], cargar, { immediate: true })
   <header class="titulo">
     <h1>Catálogo</h1>
     <span v-if="!cargando && !error">{{ total }} productos · página {{ pagina }}</span>
+    <!-- Dentro del Host App no hay encabezado propio: este enlace es la entrada a la administración. -->
+    <RouterLink v-if="esAdmin" to="/catalogo/admin" class="enlace-admin">Administrar catálogo</RouterLink>
   </header>
 
   <div class="filtros">
@@ -158,5 +161,13 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(198px, 1fr));
   gap: 18px;
+}
+
+.enlace-admin {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--acento);
+  text-decoration: none;
 }
 </style>

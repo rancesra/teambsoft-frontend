@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+// Las rutas con meta.soloAdmin piden el rol admin: App.vue muestra un aviso en vez de la vista si el
+// usuario no lo tiene. El backend igual lo exige (contrato v2.5); esto solo evita una pantalla que
+// fallaría en cada botón.
+//
 // Las rutas se declaran relativas a /catalogo porque este módulo se monta dentro del Host App bajo
 // ese prefijo (contrato del Host App, sección 2). Si el prefijo cambiara, solo cambia esta constante.
 const rutas = [
@@ -12,16 +16,19 @@ const rutas = [
   {
     path: '/catalogo/admin',
     name: 'catalogo-admin',
+    meta: { soloAdmin: true },
     component: () => import('@/vistas/VistaAdmin.vue'),
   },
   {
     path: '/catalogo/admin/nuevo',
     name: 'catalogo-nuevo',
+    meta: { soloAdmin: true },
     component: () => import('@/vistas/VistaFormulario.vue'),
   },
   {
     path: '/catalogo/admin/:id',
     name: 'catalogo-editar',
+    meta: { soloAdmin: true },
     component: () => import('@/vistas/VistaFormulario.vue'),
     props: true,
   },

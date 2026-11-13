@@ -23,7 +23,7 @@ La documentación del módulo vive **en el repositorio del backend**, para que n
 
 | Documento | Para qué te sirve |
 |---|---|
-| [Contrato de servicio (v2.2)](https://github.com/rancesra/teambsoft-backend/blob/main/docs/CONTRATO-CATALOGO.md) | **El más importante.** Qué endpoints hay, qué devuelven, qué validaciones aplican y cómo llegan los errores |
+| [Contrato de servicio (v2.5)](https://github.com/rancesra/teambsoft-backend/blob/main/docs/CONTRATO-CATALOGO.md) | **El más importante.** Qué endpoints hay, qué devuelven, qué validaciones aplican y cómo llegan los errores |
 | [Historias de usuario](https://github.com/rancesra/teambsoft-backend/blob/main/docs/HISTORIAS.md) | Qué debe poder hacer el usuario y con qué criterios se acepta cada historia |
 | [Plan de trabajo](https://github.com/rancesra/teambsoft-backend/blob/main/docs/PLAN-DE-TRABAJO.md) | Tu tarea (F1, F2 o F3), de qué depende y cómo verificar que terminó |
 | [Arquitectura](https://github.com/rancesra/teambsoft-backend/blob/main/docs/ARQUITECTURA-CATALOGO.md) | Dónde encaja este módulo dentro del sistema |
@@ -62,6 +62,33 @@ npm test   # corre las pruebas automáticas (Vitest)
 
 En Windows (PowerShell) son los mismos comandos.
 
+El módulo corre siempre en el **5173** (`strictPort`): si el puerto está ocupado, Vite se detiene en vez de cambiarlo, porque el Host App y el CORS de Kong lo esperan ahí.
+
+### Contra qué backend
+
+Vite reenvía las llamadas a `/api/catalogo` según dos variables de entorno, que se ponen al arrancar:
+
+| Caso | Mac | Windows (PowerShell) |
+|---|---|---|
+| Backend de Catálogo solo, en el `8080` (por defecto) | `npm run dev` | `npm run dev` |
+| **Integración:** todo por Kong, en el `8000` | `KONG_URL=http://localhost:8000 npm run dev` | `$env:KONG_URL="http://localhost:8000"; npm run dev` |
+| Backend solo, en otro puerto | `CATALOGO_URL=http://localhost:8081 npm run dev` | `$env:CATALOGO_URL="http://localhost:8081"; npm run dev` |
+
+En la integración (el `docker-compose` del [Host App](https://github.com/rancesra/teambsoft-hostapp/tree/main/integracion)) el `8080` no está publicado: hay que usar `KONG_URL`.
+
+### El botón "Agregar al carro"
+
+En el detalle de un producto activo y con stock, el módulo muestra **Agregar al carro**, pero **solo dentro del Host App**. Al pulsarlo no agrega nada por su cuenta: le pide al Host App que abra el módulo de Carrito en `/carrito?agregar={id}`, y Carrito agrega con su propio backend (contrato del Host App v1.2, sección 9.1). Corriendo solo, el botón no aparece, porque no hay carrito al cual llevar al usuario.
+
+### El login
+
+Crear, editar, desactivar y ver los productos retirados piden iniciar sesión con una cuenta que tenga el rol `admin` (contrato v2.5). El token lo emite **Keycloak**, que corre en el `docker-compose` del backend (`docker compose up -d keycloak`) o en el de integración.
+
+- **Dentro del Host App**, el login lo hace el cascarón: el módulo recibe la sesión con el mensaje `sesion` y, si el usuario pulsa «Iniciar sesión» en el módulo, se lo pide al Host App (contrato del Host App v1.3, sección 5).
+- **Corriendo solo**, el módulo tiene su propio botón «Iniciar sesión», que lleva a Keycloak.
+
+Todo está en [src/utilidades/sesion.js](src/utilidades/sesion.js). El cliente HTTP envía el token en cada petición, y las vistas de administración muestran un aviso a quien no es `admin` en vez de fallar en cada botón. Usuarios de prueba: `admin` / `admin123` y `cliente` / `cliente123`.
+
 **Requisito:** Node.js en versión LTS. La instalación paso a paso está en la [guía de inicio](GUIA-INICIO.md).
 
 ### Cómo se prueban las vistas
@@ -73,8 +100,10 @@ Las pruebas simulan `fetch` globalmente para controlar las respuestas del backen
 - [X] F1 — Base del frontend (proyecto Vue, rutas, cliente HTTP, manejo de errores)
 - [X] F2 — Vistas de lectura (listado y detalle)
 - [X] F3 — Vistas de administración (crear, editar y desactivar)
-- Pruebas automatizadas: **31**
-- [ ] Integración con el backend a través de Kong
+- Pruebas automatizadas: **47**
+- [X] Integración con el backend a través de Kong (`KONG_URL`)
+- [X] Botón "Agregar al carro" dentro del Host App
+- [X] Login con Keycloak, dentro y fuera del Host App
 
 ## Equipo — frente de frontend
 
