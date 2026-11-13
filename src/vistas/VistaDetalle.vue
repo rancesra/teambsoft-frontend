@@ -1,10 +1,11 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { api } from '@/api/cliente'
 import MensajeError from '@/componentes/MensajeError.vue'
 import { enPesos, nombreDeCategoria } from '@/utilidades/formato'
+import { estaEmbebido, pedirNavegacion } from '@/utilidades/hostApp'
 
 const props = defineProps({ id: { type: String, required: true } })
 
@@ -32,6 +33,15 @@ async function cargar() {
 }
 
 watch(() => props.id, cargar, { immediate: true })
+
+// Las tres condiciones del contrato: activo, con stock y dentro del Host App.
+const puedeAgregarAlCarro = computed(
+  () => estaEmbebido() && producto.value?.activo === true && producto.value.stock > 0,
+)
+
+function agregarAlCarro() {
+  pedirNavegacion(`/carrito?agregar=${encodeURIComponent(producto.value.id)}`)
+}
 </script>
 
 <template>
@@ -96,12 +106,14 @@ watch(() => props.id, cargar, { immediate: true })
       <p v-if="producto.descripcion" class="descripcion">{{ producto.descripcion }}</p>
 
       <!--
-        Espacio reservado para el módulo de Carro (Equipo C). No lo construimos nosotros: falta
-        acordar si el botón lo pinta Catálogo o lo monta aquí el Host App.
+        "Agregar al carro" (contrato de Catálogo v2.4, sección 9, y del Host App v1.2, sección 9.1).
+        Catálogo no agrega nada: le pide al Host App que abra Carrito con ?agregar={id}, y Carrito
+        agrega con su propio backend. Solo aparece dentro del Host App: corriendo solo, no hay
+        carrito al cual llevar al usuario.
       -->
-      <div v-if="producto.activo && producto.stock > 0" class="espacio-carro">
-        Espacio reservado · Carro (Equipo C)
-      </div>
+      <button v-if="puedeAgregarAlCarro" class="boton boton-carro" @click="agregarAlCarro">
+        Agregar al carro
+      </button>
     </div>
   </article>
 </template>
@@ -232,16 +244,12 @@ h1.apagado,
   margin-top: 16px;
 }
 
-.espacio-carro {
+/* Los colores salen de .boton (estilos.css); aquí solo el tamaño, porque es la acción principal. */
+.boton-carro {
   margin-top: 20px;
-  border: 2px dashed var(--aviso);
-  border-radius: var(--radio-chico);
-  padding: 16px;
-  color: var(--aviso);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  text-align: center;
+  width: 100%;
+  padding: 13px 16px;
+  font-size: 15px;
 }
 
 .esqueleto-detalle {
