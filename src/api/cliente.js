@@ -2,6 +2,8 @@
 // contrato, se cambia en un solo archivo. Traduce los errores al formato {codigo, mensaje} del
 // contrato y agrega SIN_CONEXION, que no viene del backend sino de que no hubo respuesta.
 
+import { sesion } from '@/utilidades/sesion'
+
 const BASE = import.meta.env.VITE_API_URL ?? '/api/catalogo'
 
 export class ErrorApi extends Error {
@@ -22,6 +24,9 @@ const sinConexion = () =>
 async function pedir(metodo, ruta, cuerpo) {
   // El cuerpo solo se agrega cuando hay uno: un GET con "body", aunque vaya vacío, es inválido.
   const opciones = { method: metodo, headers: {} }
+  // Con sesión, cada petición lleva el token: el backend lo exige para crear, editar, desactivar y
+  // ver los desactivados (contrato v2.5, sección 2). Las lecturas públicas lo ignoran.
+  if (sesion.token) opciones.headers.Authorization = `Bearer ${sesion.token}`
   if (cuerpo !== undefined) {
     opciones.headers['Content-Type'] = 'application/json'
     opciones.body = JSON.stringify(cuerpo)
