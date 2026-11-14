@@ -11,7 +11,11 @@ const TEXTOS = {
   STOCK_INSUFICIENTE: 'No hay unidades suficientes de algún producto.',
 }
 
-const texto = () => TEXTOS[props.error.codigo] ?? props.error.mensaje
+// Para un código que no está en TEXTOS (por ejemplo ERROR_INESPERADO) no se muestra el mensaje del
+// servidor: puede ser técnico o estar en otro idioma.
+const TEXTO_GENERICO = 'Ocurrió un error inesperado. Intenta de nuevo más tarde.'
+
+const texto = () => (Object.hasOwn(TEXTOS, props.error.codigo) ? TEXTOS[props.error.codigo] : TEXTO_GENERICO)
 </script>
 
 <template>
