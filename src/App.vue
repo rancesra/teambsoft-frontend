@@ -1,9 +1,11 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 
+import { estaEmbebido } from '@/utilidades/hostApp'
+
 // Dentro del Host App, el módulo corre en un iframe y el encabezado lo pone el cascarón. Si el módulo
 // pintara también el suyo, se verían dos (contrato del Host App v1.1, sección 4).
-const embebido = window.self !== window.top
+const embebido = estaEmbebido()
 </script>
 
 <template>

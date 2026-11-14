@@ -1,7 +1,19 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
-import { describe, expect, it, vi, afterEach } from 'vitest'
+import { describe, expect, it, vi, afterEach, beforeEach } from 'vitest'
 import VistaDetalle from '../VistaDetalle.vue'
+import { estaEmbebido, pedirNavegacion } from '@/utilidades/hostApp'
+
+// Simula el Host App: cada prueba decide si el módulo está dentro de un iframe, y se registra lo que
+// el módulo le pide al cascarón sin enviar mensajes de verdad.
+vi.mock('@/utilidades/hostApp', () => ({
+  estaEmbebido: vi.fn(() => false),
+  pedirNavegacion: vi.fn(),
+}))
+
+beforeEach(() => {
+  estaEmbebido.mockReturnValue(false)
+})
 
 function respuesta(cuerpo, estado = 200) {
   return {
@@ -76,18 +88,18 @@ describe('VistaDetalle', () => {
     expect(envoltura.text()).toContain('Camiseta basica')
     expect(envoltura.text()).toMatch(/49\.900/)
     expect(envoltura.text()).toContain('ropa')
-    expect(envoltura.text()).toContain('Espacio reservado')
   })
 
-  it('2. oculta el carro y advierte si el producto está retirado (200 con activo: false)', async () => {
+  it('2. advierte si el producto está retirado (200 con activo: false), sin botón del carro', async () => {
+    estaEmbebido.mockReturnValue(true)
     simularBackend({
       '/categorias': respuesta(categorias),
       '/productos/p1': respuesta(producto({ activo: false })),
     })
     const { envoltura } = await montarEn('/catalogo/p1')
-    
+
     expect(envoltura.text()).toContain('Producto no disponible')
-    expect(envoltura.text()).not.toContain('Espacio reservado')
+    expect(envoltura.text()).not.toContain('Agregar al carro')
     expect(envoltura.text()).not.toContain('Este producto no existe')
   })
 
@@ -141,5 +153,54 @@ describe('VistaDetalle', () => {
     const { envoltura } = await montarEn('/catalogo/p1')
     
     expect(envoltura.text()).toContain('sin imagen')
+  })
+
+  // ---- Botón "Agregar al carro" (contrato del Host App v1.2, sección 9.1) ----
+
+  it('8. dentro del Host App, con producto activo y con stock, muestra el botón del carro', async () => {
+    estaEmbebido.mockReturnValue(true)
+    simularBackend({
+      '/categorias': respuesta(categorias),
+      '/productos/p1': respuesta(producto()),
+    })
+    const { envoltura } = await montarEn('/catalogo/p1')
+
+    expect(envoltura.find('.boton-carro').exists()).toBe(true)
+  })
+
+  it('9. al pulsarlo le pide al Host App navegar a /carrito?agregar={id}', async () => {
+    estaEmbebido.mockReturnValue(true)
+    simularBackend({
+      '/categorias': respuesta(categorias),
+      '/productos/p1': respuesta(producto()),
+    })
+    const { envoltura } = await montarEn('/catalogo/p1')
+
+    await envoltura.find('.boton-carro').trigger('click')
+
+    expect(pedirNavegacion).toHaveBeenCalledTimes(1)
+    expect(pedirNavegacion).toHaveBeenCalledWith('/carrito?agregar=p1')
+  })
+
+  it('10. corriendo solo, sin el Host App, no muestra el botón', async () => {
+    simularBackend({
+      '/categorias': respuesta(categorias),
+      '/productos/p1': respuesta(producto()),
+    })
+    const { envoltura } = await montarEn('/catalogo/p1')
+
+    expect(envoltura.find('.boton-carro').exists()).toBe(false)
+  })
+
+  it('11. sin stock no muestra el botón, aunque esté dentro del Host App', async () => {
+    estaEmbebido.mockReturnValue(true)
+    simularBackend({
+      '/categorias': respuesta(categorias),
+      '/productos/p1': respuesta(producto({ stock: 0 })),
+    })
+    const { envoltura } = await montarEn('/catalogo/p1')
+
+    expect(envoltura.text()).toContain('Sin stock')
+    expect(envoltura.find('.boton-carro').exists()).toBe(false)
   })
 })
