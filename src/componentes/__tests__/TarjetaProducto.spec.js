@@ -1,6 +1,19 @@
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import TarjetaProducto from '../TarjetaProducto.vue'
+import { estaEmbebido, pedirNavegacion } from '@/utilidades/hostApp'
+
+// Simula el Host App: cada prueba decide si la tarjeta está dentro del iframe, y se registra lo que
+// le pide al cascarón sin enviar mensajes de verdad.
+vi.mock('@/utilidades/hostApp', () => ({
+  estaEmbebido: vi.fn(() => false),
+  pedirNavegacion: vi.fn(),
+}))
+
+afterEach(() => {
+  vi.clearAllMocks()
+  estaEmbebido.mockReturnValue(false)
+})
 
 const categorias = [{ id: 'cat-ropa', nombre: 'ropa' }]
 
@@ -47,5 +60,32 @@ describe('TarjetaProducto', () => {
     const etiqueta = montar({ stock }).find('.stock')
     expect(etiqueta.classes()).toContain(clase)
     expect(etiqueta.text()).toBe(texto)
+  })
+
+  describe('botón «Agregar al carro» (contrato v2.8, sección 9)', () => {
+    it('dentro del Host App, con un producto activo y con stock, aparece', () => {
+      estaEmbebido.mockReturnValue(true)
+      expect(montar().find('button.agregar').exists()).toBe(true)
+    })
+
+    it('al pulsarlo le pide al Host App abrir Carrito con ?agregar={id}', async () => {
+      estaEmbebido.mockReturnValue(true)
+      await montar({ id: 'p 1' }).find('button.agregar').trigger('click')
+      expect(pedirNavegacion).toHaveBeenCalledWith('/carrito?agregar=p%201')
+    })
+
+    it.each([
+      ['fuera del Host App', false, {}],
+      ['sin stock', true, { stock: 0 }],
+      ['con el producto retirado', true, { activo: false }],
+    ])('no aparece %s', (_caso, embebido, cambios) => {
+      estaEmbebido.mockReturnValue(embebido)
+      expect(montar(cambios).find('button.agregar').exists()).toBe(false)
+    })
+
+    it('el botón queda fuera del enlace al detalle', () => {
+      estaEmbebido.mockReturnValue(true)
+      expect(montar().find('a button').exists()).toBe(false)
+    })
   })
 })
