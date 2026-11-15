@@ -42,17 +42,24 @@ const estadoStock = computed(() => {
   color: inherit;
 }
 
+/* El recuadro mide siempre 4:3, tenga foto o no, para que las tarjetas de una fila queden parejas.
+   La foto va posicionada encima: si fuera contenido normal, una foto cuadrada estiraría el recuadro
+   (el tamaño mínimo del contenido le gana a aspect-ratio). */
 .foto {
+  position: relative;
   aspect-ratio: 4 / 3;
   background: var(--fondo-suave);
   display: grid;
   place-items: center;
 }
 
+/* contain y no cover: se ve el producto completo, sin recortarlo. */
 .foto img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .sin-foto {
