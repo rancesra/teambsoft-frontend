@@ -45,6 +45,17 @@ function validar() {
   return Object.keys(e).length === 0
 }
 
+// Al corregir un campo se borra su aviso. Sin esto, «categoría: es obligatoria» se quedaba en rojo
+// después de elegir la categoría, hasta volver a pulsar Guardar.
+for (const campo of Object.keys(formulario.value)) {
+  watch(
+    () => formulario.value[campo],
+    () => {
+      if (errores.value[campo]) delete errores.value[campo]
+    },
+  )
+}
+
 async function cargar() {
   cargando.value = true
   error.value = null
@@ -172,7 +183,7 @@ watch(() => props.id, cargar, { immediate: true })
           <option v-for="c in categorias" :key="c.id" :value="c.id">{{ c.nombre }}</option>
         </select>
         <small v-if="errores.categoria" class="mal">categoría: {{ errores.categoria }}</small>
-        <small v-else>Las opciones vienen de GET /categorias</small>
+        <small v-else>Obligatoria</small>
       </label>
 
       <label>
