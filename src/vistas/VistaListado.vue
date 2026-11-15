@@ -170,4 +170,12 @@ h1 {
   color: var(--acento);
   text-decoration: none;
 }
+
+/* En el celular, una tarjeta por fila ocupaba toda la pantalla: dos por fila se ve como una tienda. */
+@media (max-width: 520px) {
+  .rejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
 </style>

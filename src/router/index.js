@@ -45,4 +45,10 @@ const rutas = [
 export default createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: rutas,
+  // Al pasar de página o cambiar de filtro se vuelve arriba. Sin esto, al pulsar «2» al final del
+  // catálogo se cargaban los productos nuevos pero se seguía viendo el final de la lista. Con atrás y
+  // adelante del navegador se recupera la posición en la que estaba.
+  scrollBehavior(_destino, _origen, posicionGuardada) {
+    return posicionGuardada ?? { top: 0 }
+  },
 })
